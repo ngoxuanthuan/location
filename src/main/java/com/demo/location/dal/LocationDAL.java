@@ -10,5 +10,6 @@ public interface LocationDAL {
     boolean deleteLocation(Long locationId);
 
     Location getSpecificByName(String locationName);
+
     Location getSpecificByid(Long locationId);
 }
