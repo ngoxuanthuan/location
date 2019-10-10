@@ -2,6 +2,7 @@ package com.demo.location.controller;
 
 
 import com.demo.location.dal.LocationRepository;
+import com.demo.location.exceptionhandling.ResourceNotFoundException;
 import com.demo.location.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,28 +32,36 @@ public class LocationController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Location addNewLocation(@RequestBody Location location) {
         LOG.info("Add new location");
-        return locationRepository.insert(location);
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public Location updateLocation(@RequestBody Location location) {
-        LOG.info("Update location ID: {}.", location.getId());
         return locationRepository.save(location);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deleteLocation(@PathVariable String locationId) {
+    @RequestMapping(value = "/update/{locationId}", method = RequestMethod.PUT)
+    public Location updateLocation(@PathVariable(value = "locationId") String locationId, @RequestBody Location locationDetail) throws ResourceNotFoundException {
+        LOG.info("Update location ID: {}.", locationId);
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found for this id :: " + locationId));
+        location.setLng(locationDetail.getLng());
+        location.setLat(locationDetail.getLat());
+        location.setLocationName(locationDetail.getLocationName());
+        return locationRepository.save(location);
+    }
+
+    @RequestMapping(value = "/delete/{locationId}", method = RequestMethod.DELETE)
+    public void deleteLocation(@PathVariable String locationId) throws ResourceNotFoundException {
         LOG.info("Delete location ID: {}.", locationId);
-        locationRepository.deleteById(locationId);
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found for this id :: " + locationId));
+        locationRepository.delete(location);
     }
 
-    @RequestMapping(value = "/getSpecific", method = RequestMethod.GET)
-    public Object getSpecific(@PathVariable String locationId) {
+    @RequestMapping(value = "/getSpecific/{locationId}", method = RequestMethod.GET)
+    public Object getSpecific(@PathVariable String locationId) throws ResourceNotFoundException {
         LOG.info("Get specific location ID: {}.", locationId);
-        return locationRepository.findById(locationId).orElse(null);
+        return locationRepository.findById(locationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found for this id :: " + locationId));
     }
 
-    @RequestMapping(value = "/getLocationInRadius", method = RequestMethod.GET)
+    @RequestMapping(value = "/getLocationInRadius/{radius}", method = RequestMethod.GET)
     public Object getLocationInRadius(@PathVariable double radius, @RequestBody Location currentLocation) {
         LOG.info("Get all location with {} miles base on location: {}.", radius, currentLocation);
         List<Location> allLocations = locationRepository.findAll();
