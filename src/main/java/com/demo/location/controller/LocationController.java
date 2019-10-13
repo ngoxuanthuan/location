@@ -7,6 +7,7 @@ import com.demo.location.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/locations")
+@CrossOrigin("*")
 public class LocationController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -55,15 +57,22 @@ public class LocationController {
     }
 
     @RequestMapping(value = "/getSpecific/{locationId}", method = RequestMethod.GET)
-    public Object getSpecific(@PathVariable String locationId) throws ResourceNotFoundException {
+    public Location getSpecific(@PathVariable String locationId) throws ResourceNotFoundException {
         LOG.info("Get specific location ID: {}.", locationId);
         return locationRepository.findById(locationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Location not found for this id :: " + locationId));
     }
 
-    @RequestMapping(value = "/getLocationInRadius/{radius}", method = RequestMethod.GET)
-    public Object getLocationInRadius(@PathVariable double radius, @RequestBody Location currentLocation) {
-        LOG.info("Get all location with {} miles base on location: {}.", radius, currentLocation);
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    public List<Location> getAll() {
+        LOG.info("Get all location");
+        return locationRepository.findAll();
+    }
+
+    @RequestMapping(value = "/getLocationInRadius/{locationId}/{radius}", method = RequestMethod.GET)
+    public List<Location> getLocationInRadius(@PathVariable String locationId, @PathVariable double radius) throws ResourceNotFoundException {
+        LOG.info("Get all location with {} miles base on location: {}.", radius, locationId);
+        Location currentLocation = getSpecific(locationId);
         List<Location> allLocations = locationRepository.findAll();
         if (CollectionUtils.isEmpty(allLocations)) {
             return null;

@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-@Document
+@Document(collection="location")
 @Getter
 @Setter
 public class Location {
