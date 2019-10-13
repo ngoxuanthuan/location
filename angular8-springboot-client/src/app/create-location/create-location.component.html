@@ -1,0 +1,21 @@
+<h3>Create new location</h3>
+<div style="width: 400px;">
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="lat">Latitude</label>
+      <input type="text" class="form-control" id="lat" required [(ngModel)]="location.lat" name="lat">
+    </div>
+
+    <div class="form-group">
+      <label for="lng">Longitude</label>
+      <input type="text" class="form-control" id="lng" required [(ngModel)]="location.lng" name="lng">
+    </div>
+
+    <div class="form-group">
+      <label for="locationName">Location name</label>
+      <input type="text" class="form-control" id="locationName" required [(ngModel)]="location.locationName" name="locationName">
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+</div>

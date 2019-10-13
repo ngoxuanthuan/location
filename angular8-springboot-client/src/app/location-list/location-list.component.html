@@ -1,0 +1,41 @@
+<div class="panel panel-primary">
+  <div [hidden]="submitted" style="width: 400px;">
+    <form (ngSubmit)="search()">
+      <div class="form-group">
+        <label for="name">Address</label>
+        <input type="text" class="form-control" id="locationId" required [(ngModel)]="locationId"
+               name="locationId">
+
+        <label for="name">Radius(Mile)</label>
+        <input type="text" class="form-control" id="radius" required [(ngModel)]="radius" name="radius">
+      </div>
+      <button type="submit" class="btn btn-info">Search</button>
+    </form>
+  </div>
+
+  <div class="panel-body">
+    <ul class="text-right list-inline py-3">
+      <li class="list-inline-item"><a routerLink="add" class="btn btn-info" (click)="addLocation()">New</a></li>
+    </ul>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>No</th>
+        <th>Id</th>
+        <th>Location name</th>
+        <th>Latitude</th>
+        <th>Longtitude</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let employee of employees | async; index as i">
+        <td>{{i + 1}}</td>
+        <td>{{employee.id}}</td>
+        <td>{{employee.locationName}}</td>
+        <td>{{employee.lat}}</td>
+        <td>{{employee.lng}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
