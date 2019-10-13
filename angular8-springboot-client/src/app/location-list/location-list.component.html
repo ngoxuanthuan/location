@@ -28,12 +28,12 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let employee of employees | async; index as i">
+      <tr *ngFor="let location of locations | async; index as i">
         <td>{{i + 1}}</td>
-        <td>{{employee.id}}</td>
-        <td>{{employee.locationName}}</td>
-        <td>{{employee.lat}}</td>
-        <td>{{employee.lng}}</td>
+        <td>{{location.id}}</td>
+        <td>{{location.locationName}}</td>
+        <td>{{location.lat}}</td>
+        <td>{{location.lng}}</td>
       </tr>
       </tbody>
     </table>

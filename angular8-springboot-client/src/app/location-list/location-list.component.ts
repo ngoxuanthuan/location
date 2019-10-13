@@ -14,7 +14,7 @@ export class LocationListComponent implements OnInit {
   locationId: string;
   radius: number;
 
-  employees: Observable<Location[]>;
+  locations: Observable<Location[]>;
   submitted = false;
 
   constructor(private locationService: LocationService,
@@ -26,7 +26,7 @@ export class LocationListComponent implements OnInit {
   }
 
   reloadData() {
-    this.employees = this.locationService.getLocationList();
+    this.locations = this.locationService.getLocationList();
   }
 
   addLocation() {
@@ -34,6 +34,6 @@ export class LocationListComponent implements OnInit {
   }
 
   search() {
-    this.employees = this.locationService.getLocationInRadius(this.locationId, this.radius);
+    this.locations = this.locationService.getLocationInRadius(this.locationId, this.radius);
   }
 }
